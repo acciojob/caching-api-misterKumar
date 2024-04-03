@@ -3,12 +3,24 @@ const fetchButton = document.getElementById("fetch-button");
 const resultsDiv = document.getElementById("results");
 
 const cache = new Map();
+const cacheDuration = 60000; // 1 minute in milliseconds
 
 const fetchData = async () => {
-  // implement the caching here and store data in cache variable
+  const cacheKey = "cachedData";
+  const cachedData = cache.get(cacheKey);
+
+  if (cachedData && Date.now() - cachedData.timestamp < cacheDuration) {
+    console.log("Serving data from cache");
+    return cachedData.data;
+  }
 
   console.log("Making API call");
-  const response = await fetch("https://opentdb.com/api.php?amount=3");
+  const response = await fetch("https://financialmarketdata.p.rapidapi.com/api/stock/v1/get-historical-data?ticker=AAPL&interval=1d&startDate=2023-03-20&endDate=2023-03-25", {
+    headers: {
+      "X-RapidAPI-Key": "c3a9a6b376msh528c0d78a1c317ap1759efjsn28df182c8b4f",
+      "X-RapidAPI-Host": "financialmarketdata.p.rapidapi.com"
+    }
+  });
   const data = await response.json();
 
   cache.set(cacheKey, {
@@ -20,8 +32,8 @@ const fetchData = async () => {
 };
 
 const displayData = (data) => {
-  const question = data.results[0].question;
-  resultsDiv.textContent = question;
+  // Display data as per your requirement, modify this accordingly
+  resultsDiv.textContent = JSON.stringify(data);
 };
 
 fetchButton.addEventListener("click", async () => {
