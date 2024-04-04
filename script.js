@@ -15,20 +15,25 @@ const fetchData = async () => {
   }
 
   console.log("Making API call");
-  const response = await fetch("https://financialmarketdata.p.rapidapi.com/api/stock/v1/get-historical-data?ticker=AAPL&interval=1d&startDate=2023-03-20&endDate=2023-03-25", {
-    headers: {
-      "X-RapidAPI-Key": "c3a9a6b376msh528c0d78a1c317ap1759efjsn28df182c8b4f",
-      "X-RapidAPI-Host": "financialmarketdata.p.rapidapi.com"
-    }
-  });
-  const data = await response.json();
+  try {
+    const response = await fetch("https://financialmarketdata.p.rapidapi.com/api/stock/v1/get-historical-data?ticker=AAPL&interval=1d&startDate=2023-03-20&endDate=2023-03-25", {
+      headers: {
+        "X-RapidAPI-Key": "c3a9a6b376msh528c0d78a1c317ap1759efjsn28df182c8b4f",
+        "X-RapidAPI-Host": "financialmarketdata.p.rapidapi.com"
+      }
+    });
+    const data = await response.json();
 
-  cache.set(cacheKey, {
-    timestamp: Date.now(),
-    data: data,
-  });
+    cache.set(cacheKey, {
+      timestamp: Date.now(),
+      data: data,
+    });
 
-  return data;
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null;
+  }
 };
 
 const displayData = (data) => {
@@ -38,5 +43,7 @@ const displayData = (data) => {
 
 fetchButton.addEventListener("click", async () => {
   const data = await fetchData();
-  displayData(data);
+  if (data) {
+    displayData(data);
+  }
 });
