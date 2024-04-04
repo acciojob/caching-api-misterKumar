@@ -16,7 +16,7 @@ const fetchData = async () => {
 
   console.log("Making API call");
   try {
-    const response = await fetch("https://financialmarketdata.p.rapidapi.com/api/stock/v1/get-historical-data?ticker=AAPL&interval=1d&startDate=2023-03-20&endDate=2023-03-25", {
+    const response = await fetch("apiRequest", {
       headers: {
         "X-RapidAPI-Key": "c3a9a6b376msh528c0d78a1c317ap1759efjsn28df182c8b4f",
         "X-RapidAPI-Host": "financialmarketdata.p.rapidapi.com"
